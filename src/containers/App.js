@@ -1,9 +1,13 @@
-// import logo from './logo.svg';
 import React, { Component } from 'react';
+
+import classes from './App.css';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
+// import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+
+// import logo from './logo.svg';
 // import React, { useState } from 'react';
-import './App.css';
-import Radium, { StyleRoot } from 'radium';
-import Person from './Person/Person';
+// import Radium, { StyleRoot } from 'radium';
 
 class App extends Component {
   state = {
@@ -24,7 +28,7 @@ class App extends Component {
     const person = {
       ...this.state.persons[personIndex]
     }
-
+    
     person.name = event.target.value
 
     const persons = [...this.state.persons]
@@ -47,61 +51,23 @@ class App extends Component {
   }
   
   render () {
-    const style = {
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer',
-      ':hover': {
-        backgroundColor: 'lightgreen',
-        color: 'black'
-      }
-    }
-
     let persons = null
 
     if (this.state.showPersons) {
-      persons = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            return <Person
-              click= {() => this.deletePersonHandler(index)}
-              name = {person.name}
-              age = {person.age}
-              key =  {person.id}
-              changed = {(event) => this.nameChangeHandler(person.id)}
-            />
-          })}
-        </div>
-      )
-      style.backgroundColor = 'red'
-      style[':hover'] = {
-        backgroundColor: 'salmon',
-        color: 'black'
-      }
+      persons = <Persons
+        persons={this.state.persons}
+        clicked={this.deletePersonHandler}
+        changed={this.nameChangeHandler} />
     }
 
-    let classes = []
-    if (this.state.persons.length <= 2) classes.push('red')
-    if (this.state.persons.length <= 1) classes.push('bold')
-
     return (
-      <StyleRoot>
-        <div className="App">
-          <h1>Hi, I'm a React App</h1>
-          <p className={classes.join(' ')}>This is really working!</p>
-          <button
-            style={style}
-            // onClick={() => switchNameHandler('Maxiliamm!!!')}
-            onClick={this.tooglePersonsHandler}
-          >
-            Toogle Persons
-          </button>
-          {persons}
-        </div>
-      </StyleRoot>
+      <div className={classes.App}>
+        <Cockpit
+          showPersons={this.state.showPersons}
+          persons={this.state.persons}
+          clicked={this.tooglePersonsHandler} />
+        {persons}
+      </div>
     )
   }
 }
@@ -192,4 +158,4 @@ class App extends Component {
 //   // return React.createElement('div', { className: 'App' }, React.createElement('h1', null, 'Did this work?'))
 // }
 
-export default Radium(App);
+export default App;
